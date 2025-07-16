@@ -46,6 +46,9 @@ jobs:
             
             - name: Upload pages artifact
               uses: actions/upload-pages-artifact@2d163be3ddce01512f3eea7ac5b7023b5d643ce1
+              with:
+                path: dist/
+                retention-days: 30
     deploy:
         name: Deploy => GitHub Pages
         runs-on: ubuntu-latest
