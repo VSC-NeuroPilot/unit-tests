@@ -13,6 +13,15 @@ on:
     workflow_dispatch:
     workflow_call:
 
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+concurrency:
+    group: "pages"
+    cancel-in-progress: false
+
 jobs:
     build:
         name: Build site
