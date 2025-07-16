@@ -1,0 +1,59 @@
+name: Build and deploy coverage site
+
+on:
+    push:
+        branches:
+            - main
+        paths-ignore:
+            - .github/workflows/**/*
+            - "!.github/workflows/site.yml"
+            - README.md
+            - run-project-ci-tests.ts
+            - .gitignore
+    workflow_dispatch:
+    workflow_call:
+
+jobs:
+    build:
+        name: Build site
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              if: github.event_name != 'workflow_call'
+              uses: actions/checkout@v4
+            
+            - name: Cache deps
+              uses: actions/cache@v4
+              with:
+                key: neuropilot-unit-tests-${{ github.repository }}
+                path: ./node_modules
+            
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: 22.14.x
+                cache: 'npm'
+                cache-dependency-path: ./package-lock.json
+            
+            - name: Setup GitHub Pages
+              uses: actions/configure-pages@v5
+            
+            - name: Install dependencies
+              run: npm install
+            
+            - name: Build
+              run: npm run build
+            
+            - name: Upload pages artifact
+              uses: actions/upload-pages-artifact@2d163be3ddce01512f3eea7ac5b7023b5d643ce1
+    deploy:
+        name: Deploy => GitHub Pages
+        runs-on: ubuntu-latest
+        environment:
+            name: github-pages
+            url: ${{ steps.deploy.outputs.page_url }}
+        needs: build
+        steps:
+            - name: Deploy -> Pages
+              id: deploy
+              uses: actions/deploy-pages@v4

@@ -1,0 +1,49 @@
+{
+  "name": "neuropilot-unit-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NeuroPilot unit test coverage reports",
+  "homepage": "https://vsc-neuropilot.github.io/unit-tests",
+  "bugs": {
+    "url": "https://github.com/VSC-NeuroPilot/unit-tests/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VSC-NeuroPilot/unit-tests.git"
+  },
+  "readme": "./README.md",
+  "license": "UNLICENSED",
+  "author": {
+    "name": "KTrain5369",
+    "email": "69028025+KTrain5169@users.noreply.github.com",
+    "url": "https://ktrain5369.me"
+  },
+  "maintainers": [
+    {
+      "name": "Pasu4",
+      "email": "117922538+Pasu4@users.noreply.github.com",
+      "url": "https://github.com/Pasu4"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "NeuroPilot contributors",
+      "url": "https://github.com/VSC-NeuroPilot/neuropilot/contributors"
+    }
+  ],
+  "type": "module",
+  "scripts": {
+    "test": "tsx run-project-ci-tests.ts",
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite dev",
+    "serve": "vite dev"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.14",
+    "esbuild": "^0.25.6",
+    "tsx": "^4.20.3",
+    "vite": "^7.0.4"
+  }
+}

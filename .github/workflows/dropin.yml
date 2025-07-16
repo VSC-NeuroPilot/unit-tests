@@ -1,0 +1,56 @@
+name: Drop build folders into repo
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: The repository to download the artifact from.
+        type: string
+        required: true
+      artifact_id:
+        description: The artifact ID to download.
+        type: string
+        required: true
+
+jobs:
+  drop:
+    name: Download and drop-in the site folder, then build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config --user.name "GitHub Actions"
+          git config --user.email "actions@github.com"
+
+      - name: Download site artifact
+        id: download
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ inputs.artifact_id }}
+          repository: ${{ inputs.repo }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Show off directory (for debug)
+        run: ls -R -a
+
+      - name: Commit and push
+        id: git-push
+        run: |
+          git add .
+          if ! git diff --staged --quiet; then
+            git commit -m "Add new artifacts from ${{ inputs.repo }}"
+            git push
+            echo "✅ Changes committed and pushed"
+            echo "PUSH_STATUS=success" >> $GITHUB_OUTPUT
+          else
+            echo "ℹ️ No changes to commit"
+            echo "PUSH_STATUS=none" >> $GITHUB_OUTPUT
+          fi
+    
+      - name: Run workflow
+        if: ${{ steps.git-push.outputs.PUSH_STATUS == 'success' }}
+        uses: ./.github/workflows/site.yml
+        

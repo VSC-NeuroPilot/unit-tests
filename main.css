@@ -1,0 +1,25 @@
+body {
+	font-family: Arial, sans-serif;
+	max-width: 800px;
+	margin: 50px auto;
+	padding: 20px;
+}
+.project-links {
+	list-style: none;
+	padding: 0;
+}
+.project-links li {
+	margin: 10px 0;
+}
+.project-links a {
+	display: block;
+	padding: 15px;
+	background: #f5f5f5;
+	text-decoration: none;
+	color: #333;
+	border-radius: 5px;
+	transition: background 0.2s;
+}
+.project-links a:hover {
+	background: #e0e0e0;
+}
