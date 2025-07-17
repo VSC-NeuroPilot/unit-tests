@@ -1,7 +1,6 @@
-import { defineConfig } from 'vite'
+import { defineConfig, PluginOption } from 'vite'
 import { resolve, join } from 'path'
-import { readdirSync, statSync, existsSync } from 'fs'
-import { readFileSync } from 'fs'
+import { readdirSync, statSync, existsSync, readFileSync } from 'fs'
 import { transformSync } from 'esbuild'
 
 // legacy scripts
@@ -17,7 +16,7 @@ function findLegacyScripts() {
         const itemPath = resolve('.', item)
         const stat = statSync(itemPath)
 
-        if (stat.isDirectory() && item !== 'node_modules' && item !== 'dist') {
+        if (stat.isDirectory() && !ignoredDirectories.includes(item)) {
             LEGACY.forEach(scriptName => {
                 const scriptPath = resolve(itemPath, scriptName)
                 if (existsSync(scriptPath) && !foundScripts.has(scriptName)) {
@@ -41,7 +40,7 @@ function findHtmlFiles(dir: string, baseDir: string = dir): string[] {
             const itemPath = join(dir, item)
             const stat = statSync(itemPath)
 
-            if (stat.isDirectory()) {
+            if (stat.isDirectory() && !ignoredDirectories.includes(item)) {
                 // Recursively search subdirectories
                 htmlFiles.push(...findHtmlFiles(itemPath, baseDir))
             } else if (item.endsWith('.html')) {
@@ -55,7 +54,7 @@ function findHtmlFiles(dir: string, baseDir: string = dir): string[] {
     return htmlFiles
 }
 
-function handleLegacyScripts() {
+function handleLegacyScripts(): PluginOption {
     return {
         name: 'handle-legacy-scripts',
         enforce: 'pre' as const,
@@ -101,7 +100,7 @@ function handleLegacyScripts() {
     }
 }
 
-function postProcessLegacyScripts() {
+function postProcessLegacyScripts(): PluginOption {
     return {
         name: 'post-process-legacy-scripts',
         enforce: 'post' as const,
@@ -142,7 +141,7 @@ function getProjectEntries() {
         const itemPath = resolve('.', item)
         const stat = statSync(itemPath)
 
-        if (stat.isDirectory() && item in ignoredDirectories) {
+        if (stat.isDirectory() && !ignoredDirectories.includes(item)) {
             const htmlFiles = findHtmlFiles(itemPath)
 
             htmlFiles.forEach(htmlFile => {
@@ -158,7 +157,7 @@ function getProjectEntries() {
 }
 
 // Plugin to inject project links
-function injectProjectLinks() {
+function injectProjectLinks(): PluginOption {
     return {
         name: 'inject-project-links',
         transformIndexHtml(html: string) {
@@ -170,7 +169,7 @@ function injectProjectLinks() {
                 const itemPath = resolve('.', item)
                 const stat = statSync(itemPath)
 
-                if (stat.isDirectory() && item !== 'node_modules' && item !== 'dist') {
+                if (stat.isDirectory() && !ignoredDirectories.includes(item)) {
                     const indexPath = resolve(itemPath, 'index.html')
                     if (existsSync(indexPath)) {
                         projectDirs.add(item)
@@ -218,6 +217,10 @@ export default defineConfig({
     server: {
         open: false,
         port: 3000
+    },
+    preview: {
+        open: false,
+        port: 6000
     },
     css: {
         devSourcemap: true
