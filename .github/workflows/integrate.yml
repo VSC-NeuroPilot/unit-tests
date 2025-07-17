@@ -11,6 +11,10 @@ on:
         description: The artifact ID to download.
         type: string
         required: true
+      folder-name:
+        description: The folder name to store the outputted files.
+        type: string
+        required: true
 
 jobs:
   drop:
@@ -32,6 +36,7 @@ jobs:
           artifact-ids: ${{ inputs.artifact-id }}
           repository: ${{ inputs.repo }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ./${{ inputs.folder-name }}
 
       - name: Show off directory (for debug)
         run: ls -R -a
@@ -49,8 +54,8 @@ jobs:
             echo "ℹ️ No changes to commit"
             echo "PUSH_STATUS=none" >> $GITHUB_OUTPUT
           fi
-    
-      - name: Run workflow
-        if: ${{ steps.git-push.outputs.PUSH_STATUS == 'success' }}
-        uses: ./.github/workflows/deploy.yml
-        
+  deploy:
+    name: Call deployment workflow
+    needs: drop
+    if: needs.drop.outputs.PUSH_STATUS == 'success'
+    uses: ./.github/workflows/deploy.yml

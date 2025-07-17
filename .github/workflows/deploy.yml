@@ -28,7 +28,6 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
-              if: github.event_name != 'workflow_call'
               uses: actions/checkout@v4
             
             - name: Cache deps
