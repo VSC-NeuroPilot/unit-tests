@@ -7,7 +7,7 @@ on:
         description: The repository to download the artifact from.
         type: string
         required: true
-      artifact_id:
+      artifact-id:
         description: The artifact ID to download.
         type: string
         required: true
@@ -52,5 +52,5 @@ jobs:
     
       - name: Run workflow
         if: ${{ steps.git-push.outputs.PUSH_STATUS == 'success' }}
-        uses: ./.github/workflows/site.yml
+        uses: ./.github/workflows/deploy.yml
         
