@@ -25,7 +25,7 @@ export default defineConfig({
     },
     preview: {
         open: false,
-        port: 6000
+        port: 4000
     },
     css: {
         devSourcemap: true
