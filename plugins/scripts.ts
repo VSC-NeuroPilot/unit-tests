@@ -35,10 +35,10 @@ export function handleLegacyScripts(): PluginOption {
         enforce: 'pre' as const,
         transformIndexHtml(html: string) {
             // Mark legacy scripts as external to prevent bundling
-            // This regex now matches relative paths like ../sorter.js, ../../prettify.js, etc.
+            // This regex captures the filename only, discarding relative paths
             return html.replace(
-                /<script\s+src="([^"]*(?:\.\.\/)*(?:prettify|sorter|block-navigation)\.js)"><\/script>/g,
-                '<script data-legacy="true" src="/unit-tests/$1"></script>'
+                /<script\s+src="[^"]*\/(prettify|sorter|block-navigation)\.js"><\/script>/g,
+                '<script data-legacy="true" src="/unit-tests/$1.js"></script>'
             )
         },
         config(config: any) {
@@ -89,7 +89,7 @@ export function postProcessLegacyScripts(): PluginOption {
                     if (htmlAsset.type === 'asset' && typeof htmlAsset.source === 'string') {
                         htmlAsset.source = htmlAsset.source.replace(
                             /<script\s+data-legacy="true"\s+src="([^"]*)"><\/script>/g,
-                            '<script src="/unit-tests/$1"></script>'
+                            '<script src="$1"></script>'
                         )
                     }
                 }
