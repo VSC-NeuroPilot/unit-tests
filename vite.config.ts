@@ -14,6 +14,9 @@ export default defineConfig({
         rollupOptions: {
             input: getProjectEntries()
         },
+        commonjsOptions: {
+            include: [/.+\.js$/]
+        },
         outDir: 'dist',
         minify: 'esbuild',
         cssMinify: true,

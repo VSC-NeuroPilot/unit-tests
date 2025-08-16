@@ -37,7 +37,7 @@ export function handleLegacyScripts(): PluginOption {
             // Mark legacy scripts as external to prevent bundling
             // This regex captures the filename only, discarding relative paths
             return html.replace(
-                /<script\s+src="[^"]*\/(prettify|sorter|block-navigation)\.js"><\/script>/g,
+                /<script\s+src="(?:[^"]*\/)?(prettify|sorter|block-navigation)\.js"><\/script>/g,
                 '<script data-legacy="true" src="/unit-tests/$1.js"></script>'
             )
         },
