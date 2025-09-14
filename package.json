@@ -41,9 +41,9 @@
     "serve": "vite dev"
   },
   "devDependencies": {
-    "@types/node": "^24.0.14",
-    "esbuild": "^0.25.6",
-    "tsx": "^4.20.3",
-    "vite": "^7.0.4"
+    "@types/node": "^24.3.3",
+    "esbuild": "^0.25.9",
+    "tsx": "^4.20.5",
+    "vite": "^7.1.5"
   }
 }

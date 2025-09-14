@@ -5,6 +5,7 @@ import { handleLegacyScripts, postProcessLegacyScripts } from './plugins/scripts
 export default defineConfig({
     root: '.',
     base: '/unit-tests/',
+    appType: 'mpa',
     plugins: [
         injectProjectLinks(),
         handleLegacyScripts(),
@@ -12,7 +13,7 @@ export default defineConfig({
     ],
     build: {
         rollupOptions: {
-            input: getProjectEntries()
+            input: getProjectEntries(),
         },
         commonjsOptions: {
             include: [/.+\.js$/]

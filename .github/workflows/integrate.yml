@@ -20,6 +20,8 @@ jobs:
   drop:
     name: Download and drop-in the site folder, then build
     runs-on: ubuntu-latest
+    outputs:
+      PUSH_STATUS: ${{ steps.git-push.outputs.PUSH_STATUS }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
